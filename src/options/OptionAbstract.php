@@ -45,6 +45,11 @@ abstract class OptionAbstract extends BaseObject implements OptionInterface
     public $target;
 
     /**
+     * @var string target timezone for dates
+     */
+    public $timeZone;
+
+    /**
      * @inheritdoc
      */
     public function init()
@@ -177,7 +182,14 @@ abstract class OptionAbstract extends BaseObject implements OptionInterface
             if ($format == 'currency' || $format == 'decimal' || $format == 'percent') {
                 return round(floatval($val), $decimals);
             } elseif ($format == 'date' || $format == 'datetime') {
-                return $val ? new \DateTime($val) : null;
+                if ($val) {
+                    $dbTimeZone = new \DateTimeZone(Yii::$app->formatter->defaultTimeZone ?? 'UTC');
+                    $dt = new \DateTime($val, $dbTimeZone);
+                    $targetTimeZone = new \DateTimeZone($this->timeZone ?? Yii::$app->timeZone);
+                    $dt->setTimezone($targetTimeZone);
+                    return $dt;
+                }
+                return null;
             } else {
                 return $val;
             }

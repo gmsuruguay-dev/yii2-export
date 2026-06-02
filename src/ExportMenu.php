@@ -109,6 +109,11 @@ class ExportMenu extends Widget
     public $target;
 
     /**
+     * @var string timezone for dates
+     */
+    public $timeZone;
+
+    /**
      * @var array queue configuration array
      *
      * ~~~php
@@ -428,6 +433,7 @@ SCRIPT;
             'columns' => $this->columns,
             'exportFooter' => $this->exportFooter,
             'target' => $this->target,
+            'timeZone' => $this->timeZone,
         ];
     }
 }
